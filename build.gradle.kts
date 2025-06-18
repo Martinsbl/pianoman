@@ -10,7 +10,7 @@ group = "net.testiprod"
 version = "0.0.1"
 
 application {
-    mainClass = "io.ktor.server.netty.EngineMain"
+    mainClass = "net.testiprod.pianoman.ApplicationKt"
 }
 
 repositories {
