@@ -1,12 +1,13 @@
 package net.testiprod.pianoman.server
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.server.sse.*
-import io.ktor.sse.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.routing
+import io.ktor.server.sse.SSE
+import net.testiprod.pianoman.midi.configureMidiRouting
 
 fun Application.configureRouting() {
     install(SSE)
@@ -16,11 +17,6 @@ fun Application.configureRouting() {
         }
     }
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
-        sse("/sse") {
-            send(ServerSentEvent("world"))
-        }
+        configureMidiRouting()
     }
 }

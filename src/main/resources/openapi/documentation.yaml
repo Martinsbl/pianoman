@@ -6,19 +6,36 @@ info:
 servers:
   - url: "http://127.0.0.1:8080"
 paths:
-  /:
+  /midi/devices:
     get:
       description: ""
       responses:
         "200":
           description: "OK"
           content:
-            text/plain:
+            '*/*':
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Hello World!"
-  /sse:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/MidiDeviceInfo"
+  /midi/sse:
     get:
       description: ""
+components:
+  schemas:
+    MidiDeviceInfo:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        vendor:
+          type: "string"
+        description:
+          type: "string"
+        version:
+          type: "string"
+      required:
+        - "name"
+        - "vendor"
+        - "description"
+        - "version"
