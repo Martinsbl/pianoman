@@ -1,0 +1,5 @@
+services:
+  pianoman:
+    image: testiprod/pianoman:latest
+    ports:
+      - "8080:8080"

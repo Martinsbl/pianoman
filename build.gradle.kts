@@ -4,6 +4,7 @@ val logback_version: String by project
 plugins {
     kotlin("jvm") version "2.1.10"
     id("io.ktor.plugin") version "3.2.0"
+    id("com.google.cloud.tools.jib") version "3.4.5"
 }
 
 group = "net.testiprod"
@@ -31,4 +32,21 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+jib {
+    from {
+        image = "registry.access.redhat.com/ubi8/openjdk-21-runtime"
+    }
+    to {
+        image = "testiprod/pianoman"
+        tags = setOf("latest", "$version")
+    }
+    container {
+        mainClass = "net.testiprod.pianoman.ApplicationKt"
+
+        ports = listOf("8080")
+
+        creationTime = "USE_CURRENT_TIMESTAMP"
+    }
 }
