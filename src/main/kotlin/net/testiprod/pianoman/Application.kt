@@ -1,9 +1,11 @@
 package net.testiprod.pianoman
 
 import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import javax.sound.midi.MidiSystem
+import net.testiprod.pianoman.server.RequestLoggerPlugin
 import net.testiprod.pianoman.server.configureFrameworks
 import net.testiprod.pianoman.server.configureHTTP
 import net.testiprod.pianoman.server.configureRouting
@@ -25,6 +27,7 @@ fun main() {
 }
 
 fun Application.module() {
+    install(RequestLoggerPlugin)
     configureHTTP()
     configureSerialization()
     configureFrameworks()
