@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory
 private val logger = LoggerFactory.getLogger("ApplicationKt")
 
 fun main() {
-
+    val config = AppConfig.fromFile("application.yaml")
     midiStuff()
 
     embeddedServer(
         Netty,
-        port = 8080,
-        host = "0.0.0.0",
+        port = config.server.port,
+        host = config.server.host,
         module = Application::module
     ).start(wait = true)
 }
