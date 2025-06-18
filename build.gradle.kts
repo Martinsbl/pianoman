@@ -54,5 +54,6 @@ jib {
         ports = listOf("8080")
 
         creationTime = "USE_CURRENT_TIMESTAMP"
+        user = "jboss"
     }
 }
