@@ -1,6 +1,6 @@
 services:
   pianoman:
-    image: testiprod/pianoman:latest
+    image: ghcr.io/martinsbl/pianoman:latest
     ports:
       - "8080:8080"
     devices:
