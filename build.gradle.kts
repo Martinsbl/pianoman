@@ -39,8 +39,14 @@ jib {
         image = "registry.access.redhat.com/ubi8/openjdk-21-runtime"
     }
     to {
-        image = "testiprod/pianoman"
+        image = "ghcr.io/martinsbl/pianoman"
         tags = setOf("latest", "$version")
+        auth {
+            username = "martinsbl"
+            password = findProperty("github.token") as String?
+                ?: System.getenv("GH_ACTIONS_TOKEN")
+                        ?: "'github.token' is not set. Missing variable in gradle.properties?".also { println("WARNING: $it") }
+        }
     }
     container {
         mainClass = "net.testiprod.pianoman.ApplicationKt"
