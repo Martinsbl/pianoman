@@ -1,4 +1,4 @@
-package net.testiprod.pianoman
+package net.testiprod.pianoman.server
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -19,7 +19,7 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Hello World!")
         }
-        sse("/hello") {
+        sse("/sse") {
             send(ServerSentEvent("world"))
         }
     }
