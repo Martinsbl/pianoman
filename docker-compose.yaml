@@ -5,5 +5,5 @@ services:
       - "8080:8080"
     devices:
       - /dev/snd:/dev/snd
-      - /dev/midi*:/dev/midi1 # Add more as needed
+      - /dev/midi1:/dev/midi1 # Add more as needed
     privileged: true
