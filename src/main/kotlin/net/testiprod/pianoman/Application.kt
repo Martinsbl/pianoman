@@ -5,6 +5,7 @@ import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import javax.sound.midi.MidiSystem
+import net.testiprod.pianoman.midi.getMidiDeviceInfo
 import net.testiprod.pianoman.server.RequestLoggerPlugin
 import net.testiprod.pianoman.server.configureFrameworks
 import net.testiprod.pianoman.server.configureHTTP
@@ -17,6 +18,9 @@ private val logger = LoggerFactory.getLogger("ApplicationKt")
 fun main() {
     val config = AppConfig.fromFile("application.yaml")
     midiStuff()
+
+    val devices = getMidiDeviceInfo()
+    logger.info("Available MIDI devices: ${devices.joinToString { "\n${it.name} (${it.vendor})" }}")
 
     embeddedServer(
         Netty,
