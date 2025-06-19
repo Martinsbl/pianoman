@@ -36,7 +36,7 @@ dependencies {
 
 jib {
     from {
-        image = "registry.access.redhat.com/ubi8/openjdk-21-runtime"
+        image = "eclipse-temurin:21-jre-alpine"
     }
     to {
         image = "ghcr.io/martinsbl/pianoman"
@@ -54,6 +54,5 @@ jib {
         ports = listOf("8080")
 
         creationTime = "USE_CURRENT_TIMESTAMP"
-        user = "jboss"
     }
 }
