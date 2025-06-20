@@ -21,14 +21,16 @@ fun Route.configureMidiRouting() {
             val allDeviceInfo = getMidiDeviceInfo()
             val deviceInfo = allDeviceInfo.firstOrNull { it.getId() == id }
             requireNotNull(deviceInfo) { "No MIDI device found with ID: $id" }
-            val device = connectToMidiDevice(deviceInfo)
-            requireNotNull(device) { "Failed to connect to MIDI device with ID: $id" }
-            listenToMidiEvents(device)
+            connectToMidiDevice(deviceInfo)
             call.respond("Connected to MIDI device $id: ${deviceInfo.friendlyName()}")
 
         }
-        sse("/sse") {
-            send(ServerSentEvent("sse"))
+        sse("/events") {
+            val device = requireNotNull(connectedDevice) { "No MIDI device connected" }
+            val midiMessageFlow = midiMessagesFlow(device)
+            midiMessageFlow.collect {
+                send(ServerSentEvent(it.message.joinToString(", ")))
+            }
         }
     }
 }

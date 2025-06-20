@@ -14,7 +14,7 @@ paths:
           in: "path"
           required: true
           schema:
-            type: "string"
+            type: "integer"
       responses:
         "500":
           description: "Internal Server Error"
@@ -26,7 +26,8 @@ paths:
                 Example#1:
                   value: ""
         "200":
-          description: "OK"
+          description: "OK <br> call.launch(Dispatchers.IO) { <br> midiMessagesFlow(device).collect\
+            \ { <br> println(\"MIDI Message received: $it\") <br> } <br> }"
           content:
             '*/*':
               schema:
@@ -46,7 +47,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/MidiDeviceInfo"
-  /midi/sse:
+  /midi/events:
     get:
       description: ""
 components:
