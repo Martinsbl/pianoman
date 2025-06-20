@@ -21,7 +21,9 @@ fun Route.configureMidiRouting() {
             val allDeviceInfo = getMidiDeviceInfo()
             val deviceInfo = allDeviceInfo.firstOrNull { it.getId() == id }
             requireNotNull(deviceInfo) { "No MIDI device found with ID: $id" }
-            connectToMidiDevice(deviceInfo)
+            val device = connectToMidiDevice(deviceInfo)
+            requireNotNull(device) { "Failed to connect to MIDI device with ID: $id" }
+            listenToMidiEvents(device)
             call.respond("Connected to MIDI device $id: ${deviceInfo.name}")
 
         }

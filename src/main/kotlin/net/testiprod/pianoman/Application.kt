@@ -4,13 +4,16 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.server.routing.routing
+import io.ktor.server.sse.SSE
 import javax.sound.midi.MidiSystem
+import net.testiprod.pianoman.midi.configureMidiRouting
 import net.testiprod.pianoman.midi.connectedDevice
 import net.testiprod.pianoman.midi.getMidiDeviceInfo
 import net.testiprod.pianoman.server.RequestLoggerPlugin
 import net.testiprod.pianoman.server.configureFrameworks
 import net.testiprod.pianoman.server.configureHTTP
-import net.testiprod.pianoman.server.configureRouting
+import net.testiprod.pianoman.server.configureExceptionHandling
 import net.testiprod.pianoman.server.configureSerialization
 import org.slf4j.LoggerFactory
 
@@ -44,11 +47,16 @@ fun onShutdown() {
 }
 
 fun Application.module() {
-    install(RequestLoggerPlugin)
     configureHTTP()
     configureSerialization()
     configureFrameworks()
-    configureRouting()
+    configureExceptionHandling()
+
+    install(RequestLoggerPlugin)
+    install(SSE)
+    routing {
+        configureMidiRouting()
+    }
 }
 
 

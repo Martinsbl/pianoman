@@ -5,11 +5,12 @@ import javax.sound.midi.MidiMessage
 import javax.sound.midi.MidiSystem
 import javax.sound.midi.Receiver
 import javax.sound.midi.ShortMessage
+import kotlin.math.abs
 
 var connectedDevice: MidiDevice? = null
 
 fun MidiDevice.Info.getId(): Int {
-    return (name + vendor + description + version).hashCode()
+    return abs((name + vendor + description + version).hashCode())
 }
 
 fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
