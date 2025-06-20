@@ -6,12 +6,11 @@ import javax.sound.midi.MidiSystem
 import javax.sound.midi.Receiver
 import javax.sound.midi.ShortMessage
 import kotlin.math.abs
+import org.slf4j.LoggerFactory
+
+private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.midi")
 
 var connectedDevice: MidiDevice? = null
-
-fun MidiDevice.Info.getId(): Int {
-    return abs((name + vendor + description + version).hashCode())
-}
 
 fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
     val midiDevices = MidiSystem.getMidiDeviceInfo()
@@ -19,10 +18,19 @@ fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
 }
 
 fun connectToMidiDevice(deviceInfo: MidiDevice.Info): MidiDevice? {
-    connectedDevice?.close()
+    disconnectMidiDevice()
     connectedDevice = MidiSystem.getMidiDevice(deviceInfo)
+    logger.info("Connecting to MIDI device: ${deviceInfo.friendlyName()}")
     connectedDevice?.open()
     return connectedDevice
+}
+
+fun disconnectMidiDevice() {
+    connectedDevice?.let {
+        it.close()
+        logger.info("Closed MIDI device: ${it.friendlyName()}")
+    }
+    connectedDevice = null
 }
 
 fun listenToMidiEvents(device: MidiDevice) {
@@ -49,6 +57,20 @@ fun listenToMidiEvents(device: MidiDevice) {
 
         override fun close() {
             // Cleanup when receiver is closed
+            logger.info("MIDI receiver closed for device: ${device.friendlyName()}")
         }
     }
+}
+
+
+fun MidiDevice.friendlyName(): String {
+    return deviceInfo.friendlyName()
+}
+
+fun MidiDevice.Info.friendlyName(): String {
+    return "$name - $vendor ($description)"
+}
+
+fun MidiDevice.Info.getId(): Int {
+    return abs((name + vendor + description + version).hashCode())
 }
