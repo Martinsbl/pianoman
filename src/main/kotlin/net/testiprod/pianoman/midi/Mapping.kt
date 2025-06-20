@@ -4,6 +4,7 @@ import javax.sound.midi.MidiDevice
 
 fun MidiDevice.Info.toDomain(): MidiDeviceInfo {
     return MidiDeviceInfo(
+        id = this.getId(),
         name = this.name,
         vendor = this.vendor,
         description = this.description,

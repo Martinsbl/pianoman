@@ -6,6 +6,34 @@ info:
 servers:
   - url: "http://127.0.0.1:8080"
 paths:
+  /midi/connect/{id}:
+    post:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
   /midi/devices:
     get:
       description: ""
@@ -26,6 +54,9 @@ components:
     MidiDeviceInfo:
       type: "object"
       properties:
+        id:
+          type: "integer"
+          format: "int32"
         name:
           type: "string"
         vendor:
@@ -35,6 +66,7 @@ components:
         version:
           type: "string"
       required:
+        - "id"
         - "name"
         - "vendor"
         - "description"
