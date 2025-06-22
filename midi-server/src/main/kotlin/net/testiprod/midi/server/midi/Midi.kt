@@ -1,4 +1,4 @@
-package net.testiprod.pianoman.midi
+package net.testiprod.midi.server.midi
 
 
 import javax.sound.midi.MidiDevice

@@ -1,4 +1,4 @@
-package net.testiprod.pianoman.server
+package net.testiprod.midi.server.ktor
 
 import io.ktor.server.application.Application
 import io.ktor.server.plugins.swagger.swaggerUI

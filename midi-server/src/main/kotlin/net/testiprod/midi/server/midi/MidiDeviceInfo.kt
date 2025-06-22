@@ -1,4 +1,4 @@
-package net.testiprod.pianoman.midi
+package net.testiprod.midi.server.midi
 
 data class MidiDeviceInfo(
     val id: Int,

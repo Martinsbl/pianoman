@@ -1,9 +1,9 @@
-package net.testiprod.pianoman.midi
+package net.testiprod.midi.server.midi
 
 import javax.sound.midi.MidiDevice
 import javax.sound.midi.MidiMessage
 import javax.sound.midi.ShortMessage
-import net.testiprod.pianoman.transport.TMidiMessage
+import net.testiprod.midi.server.transport.TMidiMessage
 
 fun MidiDevice.Info.toDomain(): MidiDeviceInfo {
     return MidiDeviceInfo(

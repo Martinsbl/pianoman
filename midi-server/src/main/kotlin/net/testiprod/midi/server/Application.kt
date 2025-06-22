@@ -1,4 +1,4 @@
-package net.testiprod.pianoman
+package net.testiprod.midi.server
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -11,12 +11,12 @@ import io.ktor.server.websocket.pingPeriod
 import io.ktor.server.websocket.timeout
 import javax.sound.midi.MidiSystem
 import kotlin.time.Duration.Companion.seconds
-import net.testiprod.pianoman.midi.configureMidiRouting
-import net.testiprod.pianoman.midi.getMidiDeviceInfo
-import net.testiprod.pianoman.server.RequestLoggerPlugin
-import net.testiprod.pianoman.server.configureExceptionHandling
-import net.testiprod.pianoman.server.configureSerialization
-import net.testiprod.pianoman.server.configureSwagger
+import net.testiprod.midi.server.midi.configureMidiRouting
+import net.testiprod.midi.server.midi.getMidiDeviceInfo
+import net.testiprod.midi.server.ktor.RequestLoggerPlugin
+import net.testiprod.midi.server.ktor.configureExceptionHandling
+import net.testiprod.midi.server.ktor.configureSerialization
+import net.testiprod.midi.server.ktor.configureSwagger
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("ApplicationKt")

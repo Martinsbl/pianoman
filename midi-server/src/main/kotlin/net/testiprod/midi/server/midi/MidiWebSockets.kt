@@ -1,4 +1,4 @@
-package net.testiprod.pianoman.midi
+package net.testiprod.midi.server.midi
 
 import io.ktor.server.routing.Route
 import io.ktor.server.websocket.webSocket
@@ -6,8 +6,8 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import javax.sound.midi.MidiMessage
 import kotlinx.coroutines.flow.receiveAsFlow
-import net.testiprod.pianoman.server.commonGson
-import net.testiprod.pianoman.transport.TMidiMessage
+import net.testiprod.midi.server.ktor.commonGson
+import net.testiprod.midi.server.transport.TMidiMessage
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.midi.WebSocket")

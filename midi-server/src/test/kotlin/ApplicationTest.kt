@@ -5,7 +5,7 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import net.testiprod.pianoman.module
+import net.testiprod.midi.server.module
 
 class ApplicationTest {
 

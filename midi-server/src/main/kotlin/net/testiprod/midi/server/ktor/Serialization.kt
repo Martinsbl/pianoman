@@ -1,4 +1,4 @@
-package net.testiprod.pianoman.server
+package net.testiprod.midi.server.ktor
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

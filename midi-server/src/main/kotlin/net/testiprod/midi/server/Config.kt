@@ -1,4 +1,4 @@
-package net.testiprod.pianoman
+package net.testiprod.midi.server
 
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.config.ApplicationConfigValue
