@@ -41,11 +41,11 @@ fun Route.configureWebSockets() {
     webSocket("/ws-receive") {
         val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
         useMidiDevice(id) { device ->
-            val flow = midiMessagesFlow(device)
-            flow.collect {
-                // Send MIDI messages to the WebSocket client
-                send(Frame.Text(it.toTransport().toString()))
-                logger.info("Sent MIDI message: ${it.message.joinToString(", ")}")
+            val receiver = WebSocketMidiReceiver(this)
+            device.transmitter.receiver = receiver
+            incoming.receiveAsFlow().collect { frame ->
+                // This block is mostly to keep the session alive until the client disconnects
+                logger.debug("Received frame {}", frame)
             }
         }
     }
