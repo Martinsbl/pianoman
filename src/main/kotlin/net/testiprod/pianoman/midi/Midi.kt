@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.midi")
 
-var connectedDevice: MidiDevice? = null
-var midiMessageFlow: Flow<MidiMessage>? = null
 
 fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
     val midiDevices = MidiSystem.getMidiDeviceInfo()
@@ -22,22 +20,15 @@ fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
 }
 
 fun connectToMidiDevice(deviceInfo: MidiDevice.Info): MidiDevice {
-    disconnectMidiDevice()
-    logger.info("Connecting to MIDI device: ${deviceInfo.friendlyName()}")
-    MidiSystem.getMidiDevice(deviceInfo).also { device ->
-        device.open()
-        midiMessageFlow = midiMessagesFlow(device)
-        connectedDevice = device
-        return device
-    }
+    val device = MidiSystem.getMidiDevice(deviceInfo)
+    device.open()
+    logger.info("Connected to MIDI device: ${deviceInfo.friendlyName()}")
+    return device
 }
 
-fun disconnectMidiDevice() {
-    connectedDevice?.let {
-        it.close()
-        logger.info("Closed MIDI device: ${it.friendlyName()}")
-    }
-    connectedDevice = null
+fun disconnectMidiDevice(connectedDevice: MidiDevice) {
+    connectedDevice.close()
+    logger.info("Closed MIDI device: ${connectedDevice.friendlyName()}")
 }
 
 fun midiMessagesFlow(device: MidiDevice): Flow<MidiMessage> = callbackFlow {

@@ -6,7 +6,6 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import javax.sound.midi.MidiMessage
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import net.testiprod.pianoman.server.commonGson
 import net.testiprod.pianoman.transport.TMidiMessage
 import org.slf4j.LoggerFactory
@@ -40,7 +39,7 @@ fun Route.configureWebSockets() {
         } catch (e: Exception) {
             logger.error("Error while sending midi event", e)
         } finally {
-            device.close()
+            disconnectMidiDevice(device)
         }
     }
     webSocket("/ws-receive") {
@@ -48,17 +47,15 @@ fun Route.configureWebSockets() {
         val device = getMidiDevice(id)
         val flow = midiMessagesFlow(device)
         try {
-            call.launch {
-                flow.collect {
-                    // Send MIDI messages to the WebSocket client
-                    send(Frame.Text(it.toTransport().toString()))
-                    logger.info("Sent MIDI message: ${it.message.joinToString(", ")}")
-                }
+            flow.collect {
+                // Send MIDI messages to the WebSocket client
+                send(Frame.Text(it.toTransport().toString()))
+                logger.info("Sent MIDI message: ${it.message.joinToString(", ")}")
             }
         } catch (e: Exception) {
             logger.error("Error while receiving midi event", e)
         } finally {
-            device.close()
+            disconnectMidiDevice(device)
         }
     }
 }
