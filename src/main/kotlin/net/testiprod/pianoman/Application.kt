@@ -12,9 +12,8 @@ import net.testiprod.pianoman.midi.connectedDevice
 import net.testiprod.pianoman.midi.getMidiDeviceInfo
 import net.testiprod.pianoman.server.RequestLoggerPlugin
 import net.testiprod.pianoman.server.configureExceptionHandling
-import net.testiprod.pianoman.server.configureFrameworks
-import net.testiprod.pianoman.server.configureHTTP
 import net.testiprod.pianoman.server.configureSerialization
+import net.testiprod.pianoman.server.configureSwagger
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("ApplicationKt")
@@ -47,9 +46,8 @@ fun onShutdown() {
 }
 
 fun Application.module() {
-    configureHTTP()
+    configureSwagger()
     configureSerialization()
-    configureFrameworks()
     configureExceptionHandling()
 
     install(RequestLoggerPlugin)

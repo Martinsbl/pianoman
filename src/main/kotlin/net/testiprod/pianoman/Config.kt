@@ -12,8 +12,8 @@ data class AppConfig(
     val server: Server,
 ) {
     companion object {
-        fun fromFile(filePath: String): AppConfig {
-            val config = ApplicationConfig("application.yaml")
+        fun fromFile(filePath: String = "application.yaml"): AppConfig {
+            val config = ApplicationConfig(filePath)
 
             val ktorConfig = config.config("ktor")
             val serverConfig = ktorConfig.config("server")

@@ -6,9 +6,9 @@ import io.ktor.server.routing.routing
 import org.slf4j.LoggerFactory
 
 
-private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.server.HTTP")
+private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.server")
 
-fun Application.configureHTTP() {
+fun Application.configureSwagger() {
     routing {
         swaggerUI(path = "openapi")
         logger.info("Swagger docs at http://127.0.0.1:8080/openapi")
