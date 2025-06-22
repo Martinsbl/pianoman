@@ -4,6 +4,7 @@ import io.ktor.server.websocket.DefaultWebSocketServerSession
 import io.ktor.websocket.Frame
 import javax.sound.midi.MidiMessage
 import javax.sound.midi.Receiver
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
@@ -16,8 +17,12 @@ class WebSocketMidiReceiver(
     override fun send(message: MidiMessage, timeStamp: Long) {
         val transportMessage = message.toTransport()
         logger.trace("Sending MIDI message: {}", transportMessage)
-        session.launch {
-            session.send(Frame.Text(transportMessage.toString()))
+        if (session.coroutineContext.isActive) {
+            session.launch {
+                session.send(Frame.Text(transportMessage.toString()))
+            }
+        } else {
+            logger.warn("Session is not active, cannot send MIDI message: {}", transportMessage)
         }
     }
 
