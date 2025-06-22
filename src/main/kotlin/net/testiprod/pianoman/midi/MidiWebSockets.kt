@@ -17,8 +17,7 @@ fun Route.configureWebSockets() {
 
     webSocket("/ws-send") {
         val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
-        val device = getMidiDevice(id)
-        try {
+        useMidiDevice(id) { device ->
             incoming.receiveAsFlow().collect { frame ->
                 when (frame) {
                     is Frame.Text -> {
@@ -36,26 +35,18 @@ fun Route.configureWebSockets() {
                     else -> logger.warn("Received frame $frame")
                 }
             }
-        } catch (e: Exception) {
-            logger.error("Error while sending midi event", e)
-        } finally {
-            closeMidiDevice(device)
+
         }
     }
     webSocket("/ws-receive") {
         val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
-        val device = getMidiDevice(id)
-        val flow = midiMessagesFlow(device)
-        try {
+        useMidiDevice(id) { device ->
+            val flow = midiMessagesFlow(device)
             flow.collect {
                 // Send MIDI messages to the WebSocket client
                 send(Frame.Text(it.toTransport().toString()))
                 logger.info("Sent MIDI message: ${it.message.joinToString(", ")}")
             }
-        } catch (e: Exception) {
-            logger.error("Error while receiving midi event", e)
-        } finally {
-            closeMidiDevice(device)
         }
     }
 }

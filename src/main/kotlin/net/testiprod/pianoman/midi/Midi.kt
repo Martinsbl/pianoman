@@ -19,6 +19,20 @@ fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
     return midiDevices
 }
 
+suspend fun useMidiDevice(id: Int, block: suspend (MidiDevice) -> Unit) {
+    val deviceInfo = getMidiDeviceInfo().firstOrNull { it.getId() == id }
+    requireNotNull(deviceInfo) { "No MIDI device found with ID: $id" }
+    val device = openMidiDevice(deviceInfo)
+    try {
+        block(device)
+    } catch (e: Exception) {
+        logger.warn("Error using MIDI device with ID $id", e)
+        throw e
+    } finally {
+        closeMidiDevice(device)
+    }
+}
+
 fun getMidiDevice(id: Int): MidiDevice {
     val allDeviceInfo = getMidiDeviceInfo()
     val deviceInfo = allDeviceInfo.firstOrNull { it.getId() == id }
