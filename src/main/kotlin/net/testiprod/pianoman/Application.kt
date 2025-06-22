@@ -6,7 +6,11 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.routing
 import io.ktor.server.sse.SSE
+import io.ktor.server.websocket.WebSockets
+import io.ktor.server.websocket.pingPeriod
+import io.ktor.server.websocket.timeout
 import javax.sound.midi.MidiSystem
+import kotlin.time.Duration.Companion.seconds
 import net.testiprod.pianoman.midi.configureMidiRouting
 import net.testiprod.pianoman.midi.connectedDevice
 import net.testiprod.pianoman.midi.getMidiDeviceInfo
@@ -52,6 +56,14 @@ fun Application.module() {
 
     install(RequestLoggerPlugin)
     install(SSE)
+
+    install(WebSockets) {
+        pingPeriod = 15.seconds
+        timeout = 15.seconds
+        maxFrameSize = Long.MAX_VALUE
+        masking = false
+    }
+
     routing {
         configureMidiRouting()
     }

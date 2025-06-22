@@ -1,7 +1,6 @@
 package net.testiprod.pianoman.midi
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -24,6 +23,7 @@ fun Route.configureMidiRouting() {
                 call.respond(domainDevices)
             }
             route("/{id}") {
+                configureWebSockets()
                 /**
                  * Endpoint to get information about a specific MIDI device by ID.
                  * @param id The ID of the MIDI device.
@@ -44,7 +44,8 @@ fun Route.configureMidiRouting() {
                  * @param id The ID of the MIDI device to connect to.
                  */
                 post("/connect") {
-                    val device = call.getDeviceInfo()
+                    val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
+                    val device = getMidiDevice(id)
                     call.respond("Connected to MIDI device '${device.friendlyName()}'")
                 }
                 /**
@@ -56,10 +57,11 @@ fun Route.configureMidiRouting() {
                      * Catch exceptions and handle them gracefully, e.g., if "MIDI OUT transmitter not available"
                      * Period 'ping' to keep the connection alive, if needed?
                      */
-                    val device = call.getDeviceInfo()
+                    val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
+                    val device = getMidiDevice(id)
                     val midiMessageFlow = midiMessagesFlow(device)
                     midiMessageFlow.collect {
-                        send(ServerSentEvent(it.message.joinToString(", ")))
+                        send(ServerSentEvent(it.toTransport().toString()))
                     }
                 }
             }
@@ -67,8 +69,7 @@ fun Route.configureMidiRouting() {
     }
 }
 
-private fun ApplicationCall.getDeviceInfo(): MidiDevice {
-    val id = parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
+fun getMidiDevice(id: Int): MidiDevice {
     val allDeviceInfo = getMidiDeviceInfo()
     val deviceInfo = allDeviceInfo.firstOrNull { it.getId() == id }
     requireNotNull(deviceInfo) { "No MIDI device found with ID: $id" }
