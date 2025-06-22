@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-//    `java-library`  // Adds library-specific features
+    `java-library`
 }
 
 group = "net.testiprod.pianoman"
