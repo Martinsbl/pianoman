@@ -102,9 +102,9 @@ paths:
               examples:
                 Example#1:
                   value: ""
-  /midi/devices/{id}/websocket:
+  /midi/devices/{id}/ws-receive:
     get:
-      description: "Use the appropriate MIDI event type"
+      description: ""
       parameters:
         - name: "id"
           in: "path"
@@ -138,6 +138,60 @@ paths:
                 type: "string"
               examples:
                 Example#1:
+                  value: ""
+        "101":
+          description: "Switching Protocols"
+          headers:
+            Connection:
+              required: true
+              schema:
+                type: "string"
+            Upgrade:
+              required: true
+              schema:
+                type: "string"
+            Sec-WebSocket-Accept:
+              required: true
+              schema:
+                type: "string"
+  /midi/devices/{id}/ws-send:
+    get:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+        - name: "Connection"
+          in: "header"
+          required: true
+          description: "Websocket Connection parameter"
+          schema:
+            type: "string"
+        - name: "Upgrade"
+          in: "header"
+          required: true
+          description: "Websocket Upgrade parameter"
+          schema:
+            type: "string"
+        - name: "Sec-WebSocket-Key"
+          in: "header"
+          required: true
+          description: "Websocket Sec-WebSocket-Key parameter"
+          schema:
+            type: "string"
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+                Example#2:
                   value: ""
         "101":
           description: "Switching Protocols"
