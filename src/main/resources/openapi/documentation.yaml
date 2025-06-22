@@ -6,9 +6,57 @@ info:
 servers:
   - url: "http://127.0.0.1:8080"
 paths:
-  /midi/connect/{id}:
+  /midi/devices:
+    get:
+      description: "Endpoint to get a list of all available MIDI devices."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/MidiDeviceInfo"
+  /midi/devices/{id}:
+    get:
+      description: "Endpoint to get information about a specific MIDI device by ID.\
+        \ <br> id The ID of the MIDI device."
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MidiDeviceInfo"
+  /midi/devices/{id}/connect:
     post:
-      description: ""
+      description: "Endpoint to connect to a specific MIDI device by ID. <br> id The\
+        \ ID of the MIDI device to connect to."
       parameters:
         - name: "id"
           in: "path"
@@ -26,8 +74,7 @@ paths:
                 Example#1:
                   value: ""
         "200":
-          description: "OK <br> call.launch(Dispatchers.IO) { <br> midiMessagesFlow(device).collect\
-            \ { <br> println(\"MIDI Message received: $it\") <br> } <br> }"
+          description: "OK"
           content:
             '*/*':
               schema:
@@ -35,21 +82,26 @@ paths:
               examples:
                 Example#1:
                   value: ""
-  /midi/devices:
+  /midi/devices/{id}/events:
     get:
-      description: ""
+      description: "Endpoint used for connecting to and get Server-Sent Events (SSE)\
+        \ for MIDI messages from the connected device."
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
       responses:
-        "200":
-          description: "OK"
+        "500":
+          description: "Internal Server Error"
           content:
-            '*/*':
+            text/plain:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/MidiDeviceInfo"
-  /midi/events:
-    get:
-      description: ""
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
 components:
   schemas:
     MidiDeviceInfo:
