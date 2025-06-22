@@ -2,13 +2,8 @@ package net.testiprod.pianoman.midi
 
 
 import javax.sound.midi.MidiDevice
-import javax.sound.midi.MidiMessage
 import javax.sound.midi.MidiSystem
-import javax.sound.midi.Receiver
 import kotlin.math.abs
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.midi")
@@ -51,30 +46,6 @@ fun closeMidiDevice(connectedDevice: MidiDevice) {
     connectedDevice.close()
     logger.info("Closed MIDI device: ${connectedDevice.friendlyName()}")
 }
-
-fun midiMessagesFlow(device: MidiDevice): Flow<MidiMessage> = callbackFlow {
-    val receiver = object : Receiver {
-        override fun send(message: MidiMessage, timeStamp: Long) {
-            logger.debug("MIDI message received: ${message.message.joinToString(", ")}")
-            trySend(message)
-        }
-
-        override fun close() {
-            logger.info("MIDI receiver closed for device: ${device.friendlyName()}")
-        }
-    }
-
-    val transmitter = device.transmitter
-    transmitter.receiver = receiver
-    logger.info("MIDI transmitter set up for device: ${device.friendlyName()}")
-
-    awaitClose {
-        transmitter.receiver.close()
-        transmitter.close()
-        logger.info("MIDI transmitter closed for device: ${device.friendlyName()}")
-    }
-}
-
 
 fun MidiDevice.friendlyName(): String {
     return deviceInfo.friendlyName()

@@ -7,8 +7,12 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.sse.sse
-import io.ktor.sse.ServerSentEvent
+import io.ktor.utils.io.CancellationException
+import kotlinx.coroutines.awaitCancellation
+import org.slf4j.LoggerFactory
 
+
+private val logger = LoggerFactory.getLogger("net.testiprod.pianoman.midi.MidiHttpRouting")
 
 fun Route.configureMidiRouting() {
     route("/midi") {
@@ -53,14 +57,19 @@ fun Route.configureMidiRouting() {
                 sse("/events") {
                     /**
                      * TODO
-                     * Catch exceptions and handle them gracefully, e.g., if "MIDI OUT transmitter not available"
+                     * Better "wait for client to disconnect" logic?
                      * Period 'ping' to keep the connection alive, if needed?
                      */
                     val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing device ID")
-                    val device = getMidiDevice(id)
-                    val midiMessageFlow = midiMessagesFlow(device)
-                    midiMessageFlow.collect {
-                        send(ServerSentEvent(it.toTransport().toString()))
+                    useMidiDevice(id) { device ->
+                        val receiver = HttpMidiReceiver(this)
+                        device.transmitter.receiver = receiver
+                        try {
+                            // Wait for the client to close the connection, then move on
+                            awaitCancellation()
+                        } catch (e: CancellationException) {
+                            logger.warn(e.message)
+                        }
                     }
                 }
             }
