@@ -38,6 +38,8 @@ paths:
               examples:
                 Example#1:
                   value: ""
+                Example#2:
+                  value: ""
         "404":
           description: "Not Found"
           content:
@@ -73,6 +75,8 @@ paths:
               examples:
                 Example#1:
                   value: ""
+                Example#2:
+                  value: ""
         "200":
           description: "OK"
           content:
@@ -101,6 +105,12 @@ paths:
                 type: "string"
               examples:
                 Example#1:
+                  value: ""
+                Example#2:
+                  value: ""
+                Example#3:
+                  value: ""
+                Example#4:
                   value: ""
   /midi/devices/{id}/ws-receive:
     get:
@@ -138,6 +148,12 @@ paths:
                 type: "string"
               examples:
                 Example#1:
+                  value: ""
+                Example#2:
+                  value: ""
+                Example#3:
+                  value: ""
+                Example#4:
                   value: ""
         "101":
           description: "Switching Protocols"
@@ -192,6 +208,14 @@ paths:
                 Example#1:
                   value: ""
                 Example#2:
+                  value: ""
+                Example#3:
+                  value: ""
+                Example#4:
+                  value: ""
+                Example#5:
+                  value: ""
+                Example#6:
                   value: ""
         "101":
           description: "Switching Protocols"
