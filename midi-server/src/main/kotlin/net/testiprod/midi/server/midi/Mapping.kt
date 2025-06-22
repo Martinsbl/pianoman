@@ -3,10 +3,11 @@ package net.testiprod.midi.server.midi
 import javax.sound.midi.MidiDevice
 import javax.sound.midi.MidiMessage
 import javax.sound.midi.ShortMessage
+import net.testiprod.pianoman.transport.TMidiDeviceInfo
 import net.testiprod.pianoman.transport.TMidiMessage
 
-fun MidiDevice.Info.toDomain(): MidiDeviceInfo {
-    return MidiDeviceInfo(
+fun MidiDevice.Info.toDomain(): TMidiDeviceInfo {
+    return TMidiDeviceInfo(
         id = this.getId(),
         name = this.name,
         vendor = this.vendor,

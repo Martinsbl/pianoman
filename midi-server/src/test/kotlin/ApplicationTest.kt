@@ -14,7 +14,7 @@ class ApplicationTest {
         application {
             module()
         }
-        client.get("/").apply {
+        client.get("/midi/devices").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
     }

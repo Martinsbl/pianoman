@@ -1,6 +1,6 @@
-package net.testiprod.midi.server.midi
+package net.testiprod.pianoman.transport
 
-data class MidiDeviceInfo(
+data class TMidiDeviceInfo(
     val id: Int,
     val name: String,
     val vendor: String,

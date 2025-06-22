@@ -9,6 +9,7 @@ import io.ktor.server.routing.route
 import io.ktor.server.sse.sse
 import io.ktor.utils.io.CancellationException
 import kotlinx.coroutines.awaitCancellation
+import net.testiprod.pianoman.transport.TMidiDeviceInfo
 import org.slf4j.LoggerFactory
 
 
@@ -34,7 +35,7 @@ fun Route.configureMidiRouting() {
                 get {
                     val id = call.parameters["id"]?.toIntOrNull() ?: throw IllegalArgumentException("Missing or invalid device ID")
                     val devices = getMidiDeviceInfo()
-                    val deviceInfos = devices.map { MidiDeviceInfo(it.getId(), it.name, it.vendor, it.description, it.version) }
+                    val deviceInfos = devices.map { TMidiDeviceInfo(it.getId(), it.name, it.vendor, it.description, it.version) }
                     val deviceInfo = deviceInfos.firstOrNull { it.id == id }
                     if (deviceInfo == null) {
                         call.respond(HttpStatusCode.NotFound, "No MIDI device found with ID '$id'")
