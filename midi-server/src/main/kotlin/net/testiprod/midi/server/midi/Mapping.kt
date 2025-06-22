@@ -3,7 +3,7 @@ package net.testiprod.midi.server.midi
 import javax.sound.midi.MidiDevice
 import javax.sound.midi.MidiMessage
 import javax.sound.midi.ShortMessage
-import net.testiprod.midi.server.transport.TMidiMessage
+import net.testiprod.pianoman.transport.TMidiMessage
 
 fun MidiDevice.Info.toDomain(): MidiDeviceInfo {
     return MidiDeviceInfo(
@@ -26,7 +26,7 @@ fun MidiMessage.toTransport(): TMidiMessage {
 fun TMidiMessage.toMidiMessage(): MidiMessage {
     return when {
         note == null && velocity == null -> ShortMessage(status)
-        note != null && velocity != null -> ShortMessage(status, note, velocity)
+        note != null && velocity != null -> ShortMessage(status, note!!, velocity!!)
         else -> {
             throw IllegalArgumentException("Both note and velocity must be provided or neither")
         }

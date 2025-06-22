@@ -1,4 +1,4 @@
-package net.testiprod.midi.server.transport
+package net.testiprod.pianoman.transport
 
 
 data class TMidiMessage(

@@ -1,3 +1,11 @@
 rootProject.name = "pianoman"
 
-include("midi-server")
+include(":common")
+include(":midi-server")
+
+// Configure dependency resolution for all projects
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}

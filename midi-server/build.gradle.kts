@@ -4,9 +4,9 @@ val logback_version: String by project
 apply(from = "openapi.gradle.kts")
 
 plugins {
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm")
     id("io.ktor.plugin") version "3.2.0"
-    id("com.google.cloud.tools.jib") version "3.4.5"
+//    id("com.google.cloud.tools.jib") version "3.4.5"
 }
 
 group = "net.testiprod"
@@ -35,29 +35,31 @@ dependencies {
     implementation("io.ktor:ktor-server-swagger")
     implementation("io.ktor:ktor-server-websockets")
 
+    implementation(project(":common"))
+
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 
-jib {
-    from {
-        image = "eclipse-temurin:21-jre-alpine"
-    }
-    to {
-        image = "ghcr.io/martinsbl/pianoman"
-        tags = setOf("latest", "$version")
-        auth {
-            username = "martinsbl"
-            password = findProperty("github.token") as String?
-                ?: System.getenv("GH_ACTIONS_TOKEN")
-                        ?: "'github.token' is not set. Missing variable in gradle.properties?".also { println("WARNING: $it") }
-        }
-    }
-    container {
-        mainClass = "net.testiprod.pianoman.ApplicationKt"
-
-        ports = listOf("8080")
-
-        creationTime = "USE_CURRENT_TIMESTAMP"
-    }
-}
+//jib {
+//    from {
+//        image = "eclipse-temurin:21-jre-alpine"
+//    }
+//    to {
+//        image = "ghcr.io/martinsbl/pianoman"
+//        tags = setOf("latest", "$version")
+//        auth {
+//            username = "martinsbl"
+//            password = findProperty("github.token") as String?
+//                ?: System.getenv("GH_ACTIONS_TOKEN")
+//                        ?: "'github.token' is not set. Missing variable in gradle.properties?".also { println("WARNING: $it") }
+//        }
+//    }
+//    container {
+//        mainClass = "net.testiprod.pianoman.ApplicationKt"
+//
+//        ports = listOf("8080")
+//
+//        creationTime = "USE_CURRENT_TIMESTAMP"
+//    }
+//}
