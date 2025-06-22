@@ -5,6 +5,7 @@ import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 fun Route.configureWebSockets() {
@@ -17,10 +18,12 @@ fun Route.configureWebSockets() {
             val device = getMidiDevice(id)
 
             val flow = midiMessagesFlow(device)
-            flow.collect {
-                // Send MIDI messages to the WebSocket client
-                send(Frame.Text(it.toTransport().toString()))
-                logger.info("Sent MIDI message: ${it.message.joinToString(", ")}")
+            call.launch {
+                flow.collect {
+                    // Send MIDI messages to the WebSocket client
+                    send(Frame.Text(it.toTransport().toString()))
+                    logger.info("Sent MIDI message: ${it.message.joinToString(", ")}")
+                }
             }
 
             // Handle incoming messages from a client
@@ -30,7 +33,6 @@ fun Route.configureWebSockets() {
                         val midiEvent = frame.readText()
                         // Process received MIDI event
                         logger.info(midiEvent)
-                        println(midiEvent)
                     }
 
                     else -> logger.warn("Received frame $frame")
