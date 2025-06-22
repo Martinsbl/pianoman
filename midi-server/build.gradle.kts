@@ -13,7 +13,7 @@ group = "net.testiprod"
 version = "0.0.1"
 
 application {
-    mainClass = "net.testiprod.midi.server.ApplicationKt"
+    mainClass = "net.testiprod.midi.server.ServerApplicationkt"
 }
 
 repositories {

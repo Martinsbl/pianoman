@@ -18,5 +18,6 @@ fun main() {
             is NetworkResult.Error -> logger.info("Error: $result")
         }
     }
-    Thread.sleep(2000) // Keep the main thread alive for a while to see the output
+    Thread.sleep(1000) // Keep the main thread alive for a while to see the output
+    logger.info("Exiting Midi Client")
 }
