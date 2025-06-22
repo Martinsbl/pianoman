@@ -39,7 +39,7 @@ fun Route.configureWebSockets() {
         } catch (e: Exception) {
             logger.error("Error while sending midi event", e)
         } finally {
-            disconnectMidiDevice(device)
+            closeMidiDevice(device)
         }
     }
     webSocket("/ws-receive") {
@@ -55,7 +55,7 @@ fun Route.configureWebSockets() {
         } catch (e: Exception) {
             logger.error("Error while receiving midi event", e)
         } finally {
-            disconnectMidiDevice(device)
+            closeMidiDevice(device)
         }
     }
 }

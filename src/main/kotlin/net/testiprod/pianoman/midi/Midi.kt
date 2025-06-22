@@ -19,14 +19,21 @@ fun getMidiDeviceInfo(): Array<MidiDevice.Info> {
     return midiDevices
 }
 
-fun connectToMidiDevice(deviceInfo: MidiDevice.Info): MidiDevice {
+fun getMidiDevice(id: Int): MidiDevice {
+    val allDeviceInfo = getMidiDeviceInfo()
+    val deviceInfo = allDeviceInfo.firstOrNull { it.getId() == id }
+    requireNotNull(deviceInfo) { "No MIDI device found with ID: $id" }
+    return openMidiDevice(deviceInfo)
+}
+
+private fun openMidiDevice(deviceInfo: MidiDevice.Info): MidiDevice {
     val device = MidiSystem.getMidiDevice(deviceInfo)
     device.open()
     logger.info("Connected to MIDI device: ${deviceInfo.friendlyName()}")
     return device
 }
 
-fun disconnectMidiDevice(connectedDevice: MidiDevice) {
+fun closeMidiDevice(connectedDevice: MidiDevice) {
     connectedDevice.close()
     logger.info("Closed MIDI device: ${connectedDevice.friendlyName()}")
 }

@@ -8,7 +8,6 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.sse.sse
 import io.ktor.sse.ServerSentEvent
-import javax.sound.midi.MidiDevice
 
 
 fun Route.configureMidiRouting() {
@@ -67,11 +66,4 @@ fun Route.configureMidiRouting() {
             }
         }
     }
-}
-
-fun getMidiDevice(id: Int): MidiDevice {
-    val allDeviceInfo = getMidiDeviceInfo()
-    val deviceInfo = allDeviceInfo.firstOrNull { it.getId() == id }
-    requireNotNull(deviceInfo) { "No MIDI device found with ID: $id" }
-    return connectToMidiDevice(deviceInfo)
 }
