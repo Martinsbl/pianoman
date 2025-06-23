@@ -42,8 +42,8 @@ class MidiWebSocketClient(
                     when (frame) {
                         is Frame.Text -> {
                             val json = frame.readText()
-                            logger.info("Received text frame: $json")
-//                            val tMidiMessage = commonGson.fromJson(json, TMidiMessage::class.java)
+                            val tMidiMessage = commonGson.fromJson(json, TMidiMessage::class.java)
+                            emit(tMidiMessage)
                         }
 
                         else -> logger.info("Received non-text frame: $frame")

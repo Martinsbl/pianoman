@@ -6,6 +6,7 @@ import javax.sound.midi.MidiMessage
 import javax.sound.midi.Receiver
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import net.testiprod.midi.server.ktor.commonGson
 import org.slf4j.LoggerFactory
 
 class WebSocketMidiReceiver(
@@ -18,8 +19,9 @@ class WebSocketMidiReceiver(
         val transportMessage = message.toTransport()
         logger.trace("Sending MIDI message: {}", transportMessage)
         if (session.coroutineContext.isActive) {
+            val json = commonGson.toJson(transportMessage)
             session.launch {
-                session.send(Frame.Text(transportMessage.toString()))
+                session.send(Frame.Text(json))
             }
         } else {
             logger.warn("Session is not active, cannot send MIDI message: {}", transportMessage)
