@@ -2,12 +2,11 @@ package net.testiprod.midi.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.get
-import io.ktor.serialization.gson.gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import net.testiprod.midi.client.ktor.configureGson
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
 
 class MidiHttpClient(
@@ -19,11 +18,7 @@ class MidiHttpClient(
             defaultRequest {
                 url("$host:$port")
             }
-            install(ContentNegotiation) {
-                gson {
-
-                }
-            }
+            configureGson()
         },
     )
 
