@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory
 private val logger = LoggerFactory.getLogger("MidiClient")
 
 fun main() {
-    val midiClient = MidiClient("http://127.0.0.1", 8080)
+    val midiHttpClient = MidiHttpClient("http://127.0.0.1", 8080)
 
     val scope = CoroutineScope(Dispatchers.Default)
     logger.info("Hello from Midi Client!")
     scope.launch {
-        when (val result = midiClient.getMidiDevices()) {
+        when (val result = midiHttpClient.getMidiDevices()) {
             is NetworkResult.Success -> logger.info("Devices:\n${result.data.joinToString("\n")}")
             is NetworkResult.Error -> logger.info("Error: $result")
         }

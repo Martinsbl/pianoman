@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
 
-class MidiClient(
+class MidiHttpClient(
     private val httpClient: HttpClient
 ) {
 
