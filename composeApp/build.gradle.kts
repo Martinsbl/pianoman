@@ -20,7 +20,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(project(":common"))
+            implementation(project(":midi-client"))
+            implementation(project(":common")) // TODO: Use `java-library` and api() to get transitive dependencies
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
