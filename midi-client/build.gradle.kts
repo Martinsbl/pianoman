@@ -3,7 +3,7 @@ val logback_version: String by project
 plugins {
     kotlin("jvm")
     id("io.ktor.plugin") version "3.2.0"
-    application // TODO `java-library`?
+    `java-library`
 }
 
 group = "net.testiprod"
@@ -19,10 +19,10 @@ repositories {
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:${logback_version}")
-
     implementation("io.ktor:ktor-client-core")
     implementation("io.ktor:ktor-client-cio")
     implementation("io.ktor:ktor-client-content-negotiation")
+    api("io.ktor:ktor-client-logging:3.2.0")
     implementation("io.ktor:ktor-client-websockets")
     implementation("io.ktor:ktor-serialization-gson")
     implementation(project(":common"))
