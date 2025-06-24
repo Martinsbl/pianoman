@@ -28,6 +28,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.logback)
         }
     }
 }
@@ -39,11 +40,11 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "net.testiprod.pianoman.app.MainKt"
+        mainClass = "net.testiprod.pianoman.app.desktop.Desktop.kt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "net.testiprod.pianoman.app"
+            packageName = "net.testiprod.pianoman.app.desktop"
             packageVersion = "1.0.0"
         }
     }
