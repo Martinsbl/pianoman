@@ -21,17 +21,25 @@ sealed class NetworkResult<out S : Any, out E : Any> {
         suspend inline fun <reified T : Any, reified E : Any> doNetworkRequest(
             crossinline block: suspend () -> HttpResponse
         ): NetworkResult<T, E> {
-            val response: HttpResponse = block.invoke()
-            return if (response.status.isSuccess()) {
-                val data = response.body<T>()
-                Success(data)
-            } else {
-                val errorData = response.body<E>()
+            return try {
+                val response: HttpResponse = block.invoke()
+                if (response.status.isSuccess()) {
+                    val data = response.body<T>()
+                    Success(data)
+                } else {
+                    val errorData = response.body<E>()
+                    Error(
+                        code = response.status.value,
+                        simpleErrorMessage = getSimpleErrorMessage(response.status.value),
+                        advancedErrorMessage = "${response.status} at ${response.request.method.value} ${response.request.url.encodedPath}",
+                        errorData = errorData,
+                    )
+                }
+            } catch (e: Exception) {
                 Error(
-                    code = response.status.value,
-                    simpleErrorMessage = getSimpleErrorMessage(response.status.value),
-                    advancedErrorMessage = "${response.status} at ${response.request.method.value} ${response.request.url.encodedPath}",
-                    errorData = errorData,
+                    code = 500,
+                    simpleErrorMessage = e.message ?: "An unexpected error occurred",
+                    advancedErrorMessage = e.stackTraceToString().take(2000),
                 )
             }
         }

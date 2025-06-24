@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import net.testiprod.midi.client.MidiHttpClient
-import net.testiprod.midi.client.NetworkResult
+import net.testiprod.pianoman.app.toUiState
+import net.testiprod.pianoman.app.ui.UiState
+import net.testiprod.pianoman.transport.TMidiDeviceInfo
 import org.slf4j.LoggerFactory
 
 class MidiViewModel(
@@ -18,22 +20,14 @@ class MidiViewModel(
 
     private val midiHttpClient = MidiHttpClient("http://127.0.0.1", 8080, LogLevel.INFO)
 
-    private val _deviceListState = MutableStateFlow<List<String>>(emptyList())
-    val deviceListState: StateFlow<List<String>> = _deviceListState.asStateFlow()
-
+    private val _deviceListState = MutableStateFlow<UiState<List<TMidiDeviceInfo>>>(UiState.Loading)
+    val deviceListState: StateFlow<UiState<List<TMidiDeviceInfo>>> = _deviceListState.asStateFlow()
 
     fun fetchMidiDevices() {
+        _deviceListState.value = UiState.Loading
         viewModelScope.launch {
-            when (val result = midiHttpClient.getMidiDevices()) {
-                is NetworkResult.Success -> {
-                    logger.info("Devices:\n${result.data.joinToString("\n")}")
-                    _deviceListState.value = result.data.map { it.name }
-                }
-
-                is NetworkResult.Error -> {
-                    logger.error("Error fetching MIDI devices: $result")
-                }
-            }
+            val result = midiHttpClient.getMidiDevices()
+            _deviceListState.value = result.toUiState()
         }
     }
 

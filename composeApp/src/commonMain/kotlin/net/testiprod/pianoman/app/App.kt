@@ -47,7 +47,7 @@ fun App() {
                     Text("Hello Compose!")
                 }
             }
-            Text(state.joinToString("\n") { "Device: $it" })
+            Text(state.toString())
         }
     }
 }
