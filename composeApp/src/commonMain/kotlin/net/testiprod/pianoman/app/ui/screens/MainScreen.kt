@@ -3,6 +3,7 @@ package net.testiprod.pianoman.app.ui.screens
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import net.testiprod.pianoman.app.midi.MidiViewModel
 import net.testiprod.pianoman.app.ui.MidiDeviceView
+import net.testiprod.pianoman.app.ui.PianoView
 import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.app.ui.UiStateView
 import net.testiprod.pianoman.app.ui.mock.mockMidiDeviceInfo
@@ -36,6 +38,8 @@ fun MainScreen(
             midiDevices = midiDevicesState,
             onFetchDevicesClick = viewModel::fetchMidiDevices,
             onDeviceClick = viewModel::openMidiWebSocket,
+            onKeyPress = viewModel::onKeyPress,
+            onKeyRelease = viewModel::onKeyRelease,
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -46,6 +50,27 @@ private fun MainScreenContent(
     midiDevices: UiState<List<TMidiDeviceInfo>>,
     onFetchDevicesClick: () -> Unit,
     onDeviceClick: (deviceId: Int) -> Unit,
+    onKeyPress: (Int) -> Unit,
+    onKeyRelease: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier = modifier) {
+        MidiDeviceListView(midiDevices, onDeviceClick, onFetchDevicesClick)
+        PianoView(
+            onKeyPress = onKeyPress,
+            onKeyRelease = onKeyRelease,
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun MidiDeviceListView(
+    midiDevices: UiState<List<TMidiDeviceInfo>>,
+    onDeviceClick: (deviceId: Int) -> Unit,
+    onFetchDevicesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -89,5 +114,7 @@ private fun Preview() {
         midiDevices = UiState.Success(mockMidiDeviceInfo),
         onFetchDevicesClick = {},
         onDeviceClick = {},
+        onKeyPress = { _ -> },
+        onKeyRelease = { _ -> },
     )
 }

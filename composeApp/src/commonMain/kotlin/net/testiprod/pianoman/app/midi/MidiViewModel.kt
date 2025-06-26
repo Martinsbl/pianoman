@@ -14,6 +14,7 @@ import net.testiprod.midi.client.MidiWebSocketClient
 import net.testiprod.pianoman.app.toUiState
 import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
+import net.testiprod.pianoman.transport.TMidiMessage
 import org.slf4j.LoggerFactory
 
 class MidiViewModel : ViewModel() {
@@ -40,4 +41,21 @@ class MidiViewModel : ViewModel() {
         midiWebSocketClient.connectToTransmitWebSocket(deviceId, viewModelScope)
     }
 
+    fun onKeyPress(key: Int) {
+        logger.info("Key pressed: $key")
+        viewModelScope.launch {
+            val message = TMidiMessage(144, key, 40)
+            midiWebSocketClient.sendMidiMessage(message)
+            midiWebSocketClient.sendMidiMessage(message.copy(note = key + 3))
+            midiWebSocketClient.sendMidiMessage(message.copy(note = key + 7))
+        }
+    }
+
+    fun onKeyRelease(key: Int) {
+        logger.info("Key released: $key")
+        viewModelScope.launch {
+            val message = TMidiMessage(128, key, 0)
+            midiWebSocketClient.sendMidiMessage(message)
+        }
+    }
 }
