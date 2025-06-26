@@ -46,8 +46,8 @@ class MidiViewModel : ViewModel() {
         viewModelScope.launch {
             val message = TMidiMessage(144, key, 40)
             midiWebSocketClient.sendMidiMessage(message)
-            midiWebSocketClient.sendMidiMessage(message.copy(note = key + 3))
-            midiWebSocketClient.sendMidiMessage(message.copy(note = key + 7))
+//            midiWebSocketClient.sendMidiMessage(message.copy(note = key + 3))
+//            midiWebSocketClient.sendMidiMessage(message.copy(note = key + 7))
         }
     }
 
