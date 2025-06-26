@@ -89,12 +89,12 @@ private fun MidiDeviceListView(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(deviceInfoList, key = { it.id }) { midiDevice ->
+                val sortedList = deviceInfoList.sortedBy { it.name }
+                items(sortedList, key = { it.id }) { midiDevice ->
                     MidiDeviceView(
                         midiDevice = midiDevice,
                         onClick = {
                             onDeviceClick(midiDevice.id)
-                            println(midiDevice)
                         },
                         modifier = Modifier.fillMaxWidth(),
                     )
