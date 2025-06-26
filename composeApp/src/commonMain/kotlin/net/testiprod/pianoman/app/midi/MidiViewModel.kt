@@ -27,6 +27,10 @@ class MidiViewModel : ViewModel() {
     private val _deviceListState = MutableStateFlow<UiState<List<TMidiDeviceInfo>>>(UiState.Loading)
     val deviceListState: StateFlow<UiState<List<TMidiDeviceInfo>>> = _deviceListState.asStateFlow()
 
+    init {
+        fetchMidiDevices()
+    }
+
     fun fetchMidiDevices() {
         _deviceListState.value = UiState.Loading
         viewModelScope.launch {
