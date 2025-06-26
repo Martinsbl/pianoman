@@ -3,6 +3,8 @@ package net.testiprod.pianoman.app.midi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.ktor.client.plugins.logging.LogLevel
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +27,7 @@ class MidiViewModel : ViewModel() {
     fun fetchMidiDevices() {
         _deviceListState.value = UiState.Loading
         viewModelScope.launch {
+            delay(1.seconds)
             val result = midiHttpClient.getMidiDevices()
             _deviceListState.value = result.toUiState()
         }

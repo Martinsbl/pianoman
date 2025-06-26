@@ -3,10 +3,9 @@ package net.testiprod.pianoman.app.ui.screens
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,6 +23,7 @@ import net.testiprod.pianoman.app.midi.MidiViewModel
 import net.testiprod.pianoman.app.ui.MidiDeviceView
 import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.app.ui.UiStateView
+import net.testiprod.pianoman.app.ui.mock.mockMidiDeviceInfo
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
 
 @Composable
@@ -48,20 +48,21 @@ private fun MainScreenContent(
 ) {
     Column(
         modifier = modifier
-            .safeContentPadding()
-            .fillMaxSize(),
+            .width(200.dp)
+            .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Button(onClick = onFetchDevicesClicked) {
-            Text("Update MIDI Devices")
-        }
-        UiStateView(midiDevices) {
+        UiStateView(
+            midiDevices,
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp),
+        ) { deviceInfoList ->
             LazyColumn(
-                modifier = Modifier.width(200.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(it, key = { it.id }) { midiDevice ->
+                items(deviceInfoList, key = { it.id }) { midiDevice ->
                     MidiDeviceView(
                         midiDevice = midiDevice,
                         onClick = { println(midiDevice) },
@@ -70,6 +71,9 @@ private fun MainScreenContent(
                 }
             }
         }
+        Button(onClick = onFetchDevicesClicked) {
+            Text("Update MIDI Devices")
+        }
     }
 }
 
@@ -77,32 +81,7 @@ private fun MainScreenContent(
 @Composable
 private fun Preview() {
     MainScreenContent(
-        midiDevices = UiState.Success(
-            listOf(
-                TMidiDeviceInfo(id = 1791575921, name = "Gervill", vendor = "OpenJDK", description = "Software MIDI Synthesizer", version = "1.0"),
-                TMidiDeviceInfo(
-                    id = 1219393805,
-                    name = "Real Time Sequencer",
-                    vendor = "Oracle Corporation",
-                    description = "Software sequencer",
-                    version = "Version 1.0"
-                ),
-                TMidiDeviceInfo(
-                    id = 1110839041,
-                    name = "Microsoft MIDI Mapper",
-                    vendor = "Unknown vendor",
-                    description = "Windows MIDI_MAPPER",
-                    version = "5.0"
-                ),
-                TMidiDeviceInfo(
-                    id = 85360850,
-                    name = "Microsoft GS Wavetable Synth",
-                    vendor = "Unknown vendor",
-                    description = "Internal software synthesizer",
-                    version = "1.0"
-                ),
-            )
-        ),
+        midiDevices = UiState.Success(mockMidiDeviceInfo),
         onFetchDevicesClicked = {},
     )
 }
