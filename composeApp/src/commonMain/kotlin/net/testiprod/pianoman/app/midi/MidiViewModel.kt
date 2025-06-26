@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import net.testiprod.midi.client.MidiHttpClient
+import net.testiprod.midi.client.MidiWebSocketClient
 import net.testiprod.pianoman.app.toUiState
 import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
@@ -20,6 +21,7 @@ class MidiViewModel : ViewModel() {
     private val logger = LoggerFactory.getLogger("App")
 
     private val midiHttpClient = MidiHttpClient("http://127.0.0.1", 8080, LogLevel.INFO)
+    private val midiWebSocketClient = MidiWebSocketClient("ws://127.0.0.1", 8080)
 
     private val _deviceListState = MutableStateFlow<UiState<List<TMidiDeviceInfo>>>(UiState.Loading)
     val deviceListState: StateFlow<UiState<List<TMidiDeviceInfo>>> = _deviceListState.asStateFlow()
@@ -31,6 +33,11 @@ class MidiViewModel : ViewModel() {
             val result = midiHttpClient.getMidiDevices()
             _deviceListState.value = result.toUiState()
         }
+    }
+
+    fun openMidiWebSocket(deviceId: Int) {
+        logger.info("Opening MIDI WebSocket for device $deviceId")
+        midiWebSocketClient.connectToTransmitWebSocket(deviceId, viewModelScope)
     }
 
 }

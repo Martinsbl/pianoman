@@ -34,7 +34,8 @@ fun MainScreen(
     Scaffold { paddingValues ->
         MainScreenContent(
             midiDevices = midiDevicesState,
-            onFetchDevicesClicked = viewModel::fetchMidiDevices,
+            onFetchDevicesClick = viewModel::fetchMidiDevices,
+            onDeviceClick = viewModel::openMidiWebSocket,
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -43,7 +44,8 @@ fun MainScreen(
 @Composable
 private fun MainScreenContent(
     midiDevices: UiState<List<TMidiDeviceInfo>>,
-    onFetchDevicesClicked: () -> Unit,
+    onFetchDevicesClick: () -> Unit,
+    onDeviceClick: (deviceId: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -65,13 +67,16 @@ private fun MainScreenContent(
                 items(deviceInfoList, key = { it.id }) { midiDevice ->
                     MidiDeviceView(
                         midiDevice = midiDevice,
-                        onClick = { println(midiDevice) },
+                        onClick = {
+                            onDeviceClick(midiDevice.id)
+                            println(midiDevice)
+                        },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
         }
-        Button(onClick = onFetchDevicesClicked) {
+        Button(onClick = onFetchDevicesClick) {
             Text("Update MIDI Devices")
         }
     }
@@ -82,6 +87,7 @@ private fun MainScreenContent(
 private fun Preview() {
     MainScreenContent(
         midiDevices = UiState.Success(mockMidiDeviceInfo),
-        onFetchDevicesClicked = {},
+        onFetchDevicesClick = {},
+        onDeviceClick = {},
     )
 }
