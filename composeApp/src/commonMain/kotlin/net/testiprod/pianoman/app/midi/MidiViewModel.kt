@@ -79,12 +79,10 @@ class MidiViewModel : ViewModel() {
     fun playSong(song: List<MidiTimings>) {
         logger.info("Playing song with ${song.size} notes")
         viewModelScope.launch {
-            var lastTime = 0L
             for (note in song) {
                 onKeyPress(note.note)
-                delay(note.startTime - lastTime)
+                delay(note.startTime)
 //                onKeyRelease(note.note)
-                lastTime = note.startTime
             }
         }
     }

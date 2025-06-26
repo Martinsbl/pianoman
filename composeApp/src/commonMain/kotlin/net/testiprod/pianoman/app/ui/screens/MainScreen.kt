@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import net.testiprod.pianoman.app.midi.MidiViewModel
 import net.testiprod.pianoman.app.music.chordProgression
+import net.testiprod.pianoman.app.music.moonlightSonataNotes
 import net.testiprod.pianoman.app.ui.MidiDeviceView
 import net.testiprod.pianoman.app.ui.PianoView
 import net.testiprod.pianoman.app.ui.UiState
@@ -41,7 +42,7 @@ fun MainScreen(
             onDeviceClick = viewModel::openMidiWebSocket,
             onKeyPress = viewModel::onKeyPress,
             onKeyRelease = viewModel::onKeyRelease,
-            onButtonClick = { viewModel.playSong(chordProgression) },
+            onButtonClick = { viewModel.playSong(moonlightSonataNotes) },
             modifier = Modifier.padding(paddingValues),
         )
     }
