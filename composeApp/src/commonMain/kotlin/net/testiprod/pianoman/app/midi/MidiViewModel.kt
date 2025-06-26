@@ -1,7 +1,8 @@
 package net.testiprod.pianoman.app.midi
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.ktor.client.plugins.logging.LogLevel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,9 +13,7 @@ import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
 import org.slf4j.LoggerFactory
 
-class MidiViewModel(
-    private val viewModelScope: CoroutineScope,
-) {
+class MidiViewModel : ViewModel() {
 
     private val logger = LoggerFactory.getLogger("App")
 
