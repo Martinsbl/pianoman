@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import net.testiprod.midi.client.MidiHttpClient
 import net.testiprod.midi.client.MidiWebSocketClient
+import net.testiprod.pianoman.app.music.MidiTimings
 import net.testiprod.pianoman.app.toUiState
 import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
@@ -21,6 +22,7 @@ class MidiViewModel : ViewModel() {
 
     private val logger = LoggerFactory.getLogger("App")
 
+    private val favoriteMidiDeviceId = 1258500461
     private val midiHttpClient = MidiHttpClient("http://127.0.0.1", 8080, LogLevel.INFO)
     private val midiWebSocketClient = MidiWebSocketClient("ws://127.0.0.1", 8080)
 
@@ -37,6 +39,17 @@ class MidiViewModel : ViewModel() {
             delay(1.seconds)
             val result = midiHttpClient.getMidiDevices()
             _deviceListState.value = result.toUiState()
+            connectToFavoriteIfPresent()
+        }
+    }
+
+    private fun connectToFavoriteIfPresent() {
+        if (deviceListState.value is UiState.Success) {
+            val devicesList = (deviceListState.value as UiState.Success<List<TMidiDeviceInfo>>).data
+            val favorite = devicesList.firstOrNull { it.id == favoriteMidiDeviceId }
+            if (favorite != null) {
+                openMidiWebSocket(favorite.id)
+            }
         }
     }
 
@@ -60,6 +73,19 @@ class MidiViewModel : ViewModel() {
         viewModelScope.launch {
             val message = TMidiMessage(128, key, 0)
             midiWebSocketClient.sendMidiMessage(message)
+        }
+    }
+
+    fun playSong(song: List<MidiTimings>) {
+        logger.info("Playing song with ${song.size} notes")
+        viewModelScope.launch {
+            var lastTime = 0L
+            for (note in song) {
+                onKeyPress(note.note)
+                delay(note.startTime - lastTime)
+//                onKeyRelease(note.note)
+                lastTime = note.startTime
+            }
         }
     }
 }

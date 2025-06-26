@@ -39,6 +39,7 @@ fun Note.toMidiNoteNumber(): Int {
     return midiNumber
 }
 
+
 fun Int.midiNumberToNote(preferSharps: Boolean = true): Note {
     val midiNumber = this
     require(midiNumber in 0..127) { "MIDI number must be between 0 and 127" }
@@ -83,6 +84,38 @@ fun Int.midiNumberToNote(preferSharps: Boolean = true): Note {
 
     return Note(
         letter = letter,
+        accidental = accidental,
+        octave = octave
+    )
+}
+
+fun String.toNote(): Note {
+    val noteString = this
+    val cleanedString = noteString.trim()
+
+    val noteRegex = Regex("^([A-Ga-g])([#b♯♭𝄪𝄫]{0,2})(-?\\d+)$")
+
+    val matchResult = noteRegex.matchEntire(cleanedString)
+        ?: throw IllegalArgumentException("Invalid note format: '$noteString'")
+
+    val letterStr = matchResult.groupValues[1].uppercase()
+    val accidentalStr = matchResult.groupValues[2]
+    val octaveStr = matchResult.groupValues[3]
+
+    val noteLetter = NoteLetter.valueOf(letterStr)
+    val accidental = when (accidentalStr) {
+        "", "♮" -> Accidental.NATURAL
+        "#", "♯" -> Accidental.SHARP
+        "##", "♯♯", "𝄪" -> Accidental.DOUBLE_SHARP
+        "b", "♭" -> Accidental.FLAT
+        "bb", "♭♭", "𝄫" -> Accidental.DOUBLE_FLAT
+        else -> throw IllegalArgumentException("Invalid accidental: '$accidentalStr'")
+    }
+
+    val octave = octaveStr.toInt()
+
+    return Note(
+        letter = noteLetter,
         accidental = accidental,
         octave = octave
     )

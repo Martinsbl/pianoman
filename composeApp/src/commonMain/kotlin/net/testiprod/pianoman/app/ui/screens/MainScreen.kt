@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import net.testiprod.pianoman.app.midi.MidiViewModel
+import net.testiprod.pianoman.app.music.chordProgression
 import net.testiprod.pianoman.app.ui.MidiDeviceView
 import net.testiprod.pianoman.app.ui.PianoView
 import net.testiprod.pianoman.app.ui.UiState
@@ -40,6 +41,7 @@ fun MainScreen(
             onDeviceClick = viewModel::openMidiWebSocket,
             onKeyPress = viewModel::onKeyPress,
             onKeyRelease = viewModel::onKeyRelease,
+            onButtonClick = { viewModel.playSong(chordProgression) },
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -52,6 +54,7 @@ private fun MainScreenContent(
     onDeviceClick: (deviceId: Int) -> Unit,
     onKeyPress: (Int) -> Unit,
     onKeyRelease: (Int) -> Unit,
+    onButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
@@ -63,6 +66,9 @@ private fun MainScreenContent(
                 .fillMaxHeight()
                 .weight(1f),
         )
+        Button(onClick = onButtonClick) {
+            Text("Moonlight Sonata")
+        }
     }
 }
 
@@ -116,5 +122,6 @@ private fun Preview() {
         onDeviceClick = {},
         onKeyPress = { _ -> },
         onKeyRelease = { _ -> },
+        onButtonClick = {},
     )
 }
