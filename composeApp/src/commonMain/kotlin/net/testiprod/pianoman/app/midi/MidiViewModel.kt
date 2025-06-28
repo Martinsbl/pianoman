@@ -1,8 +1,11 @@
 package net.testiprod.pianoman.app.midi
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import io.ktor.client.plugins.logging.LogLevel
+import kotlin.reflect.KClass
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import net.testiprod.midi.client.MidiHttpClient
 import net.testiprod.midi.client.MidiWebSocketClient
+import net.testiprod.pianoman.app.config.MidiServerConfig
 import net.testiprod.pianoman.app.music.MidiTimings
 import net.testiprod.pianoman.app.toUiState
 import net.testiprod.pianoman.app.ui.UiState
@@ -18,13 +22,22 @@ import net.testiprod.pianoman.transport.TMidiDeviceInfo
 import net.testiprod.pianoman.transport.TMidiMessage
 import org.slf4j.LoggerFactory
 
-class MidiViewModel : ViewModel() {
+class MidiViewModel(
+    midiServerConfig: MidiServerConfig,
+) : ViewModel() {
 
-    private val logger = LoggerFactory.getLogger("App")
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-    private val favoriteMidiDeviceId = 1258500461
-    private val midiHttpClient = MidiHttpClient("http://127.0.0.1", 8080, LogLevel.INFO)
-    private val midiWebSocketClient = MidiWebSocketClient("ws://127.0.0.1", 8080)
+    private val favoriteMidiDeviceId = midiServerConfig.favoriteMidiId
+    private val midiHttpClient = MidiHttpClient(
+        "http://${midiServerConfig.host}",
+        midiServerConfig.port,
+        LogLevel.INFO
+    )
+    private val midiWebSocketClient = MidiWebSocketClient(
+        "ws://${midiServerConfig.host}",
+        midiServerConfig.port,
+    )
 
     private val _deviceListState = MutableStateFlow<UiState<List<TMidiDeviceInfo>>>(UiState.Loading)
     val deviceListState: StateFlow<UiState<List<TMidiDeviceInfo>>> = _deviceListState.asStateFlow()
@@ -85,5 +98,18 @@ class MidiViewModel : ViewModel() {
 //                onKeyRelease(note.note)
             }
         }
+    }
+
+    companion object {
+
+        fun factory(
+            midiServerConfig: MidiServerConfig,
+        ): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
+                    @Suppress("UNCHECKED_CAST")
+                    return MidiViewModel(midiServerConfig) as T
+                }
+            }
     }
 }

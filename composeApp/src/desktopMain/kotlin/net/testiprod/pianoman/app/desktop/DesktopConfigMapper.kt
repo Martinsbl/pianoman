@@ -37,6 +37,7 @@ class DesktopConfigMapper : ConfigMapper {
         return MidiServerConfig(
             host = midiConfig.getString("host"),
             port = midiConfig.getInt("port"),
+            favoriteMidiId = midiConfig.getInt("favorite-midi-id"),
         )
     }
 }
