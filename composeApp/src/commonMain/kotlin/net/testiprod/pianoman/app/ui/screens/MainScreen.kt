@@ -19,8 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import net.testiprod.pianoman.app.ai.AiViewModel
 import net.testiprod.pianoman.app.midi.MidiViewModel
-import net.testiprod.pianoman.app.music.moonlightSonataNotes
 import net.testiprod.pianoman.app.ui.MidiDeviceView
 import net.testiprod.pianoman.app.ui.PianoView
 import net.testiprod.pianoman.app.ui.UiState
@@ -31,6 +31,7 @@ import net.testiprod.pianoman.transport.TMidiDeviceInfo
 @Composable
 fun MainScreen(
     viewModel: MidiViewModel,
+    aiViewModel: AiViewModel,
 ) {
     val midiDevicesState by viewModel.deviceListState.collectAsState()
     Scaffold { paddingValues ->
@@ -40,7 +41,10 @@ fun MainScreen(
             onDeviceClick = viewModel::openMidiWebSocket,
             onKeyPress = viewModel::onKeyPress,
             onKeyRelease = viewModel::onKeyRelease,
-            onButtonClick = { viewModel.playSong(moonlightSonataNotes) },
+            onButtonClick = {
+                aiViewModel.chat("Play Moonlight Sonata")
+//                viewModel.playSong(moonlightSonataNotes)
+            },
             modifier = Modifier.padding(paddingValues),
         )
     }
