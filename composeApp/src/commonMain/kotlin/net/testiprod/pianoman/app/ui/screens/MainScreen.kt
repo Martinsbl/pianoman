@@ -20,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import net.testiprod.pianoman.app.config.AppConfig
 import net.testiprod.pianoman.app.midi.MidiViewModel
-import net.testiprod.pianoman.app.music.chordProgression
 import net.testiprod.pianoman.app.music.moonlightSonataNotes
 import net.testiprod.pianoman.app.ui.MidiDeviceView
 import net.testiprod.pianoman.app.ui.PianoView
@@ -32,6 +32,7 @@ import net.testiprod.pianoman.transport.TMidiDeviceInfo
 
 @Composable
 fun MainScreen(
+    appConfig: AppConfig,
     viewModel: MidiViewModel = viewModel(),
 ) {
     val midiDevicesState by viewModel.deviceListState.collectAsState()

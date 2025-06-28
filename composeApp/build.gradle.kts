@@ -22,6 +22,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jetbrains.androidx.lifecycle.viemodel)
+            implementation(libs.langchain4j.openai)
             implementation(project(":midi-client"))
             implementation(project(":common")) // TODO: Use `java-library` and api() to get transitive dependencies
         }
@@ -32,6 +33,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.logback)
+            implementation("com.typesafe:config:1.4.3")
         }
     }
 }
