@@ -17,7 +17,7 @@ class DesktopConfigMapper : ConfigMapper {
         require(file.exists() && file.isFile) {
             "Configuration file not found at '$path'. Please ensure the file exists and is a valid file."
         }
-        ConfigFactory.parseFile(file)
+        ConfigFactory.parseFile(file).resolve()
     }
 
     override fun getAiConfig(): AiConfig {
