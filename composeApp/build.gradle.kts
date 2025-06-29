@@ -23,6 +23,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jetbrains.androidx.lifecycle.viemodel)
             implementation(libs.langchain4j.openai)
+            implementation(libs.langchain4j)
             implementation(project(":midi-client"))
             implementation(project(":common")) // TODO: Use `java-library` and api() to get transitive dependencies
         }

@@ -20,6 +20,7 @@ ktor-serverNetty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "kt
 ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
 jetbrains-androidx-lifecycle-viemodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrainsAndoidxLifecycle" }
 langchain4j-openai = { module = "dev.langchain4j:langchain4j-open-ai", version.ref = "langChain4j" }
+langchain4j = { module = "dev.langchain4j:langchain4j", version.ref = "langChain4j" }
 
 [plugins]
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }

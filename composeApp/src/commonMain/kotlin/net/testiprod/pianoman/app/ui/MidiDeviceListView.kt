@@ -24,9 +24,7 @@ fun MidiDeviceListView(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .width(200.dp)
-            .fillMaxHeight(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         UiStateView(
