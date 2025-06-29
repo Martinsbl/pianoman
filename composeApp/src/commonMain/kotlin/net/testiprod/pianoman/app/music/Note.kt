@@ -26,10 +26,15 @@ data class Note(
         fun fromMidi(midiNumber: Int, preferSharps: Boolean = true): Note {
             return midiNumber.midiNumberToNote(preferSharps)
         }
+
+        fun fromString(string: String): Note {
+            require(string.isNotEmpty() && string.length <= 3) { "Invalid midi string '$this'" }
+            return string.toNote()
+        }
     }
 }
 
-fun Note.toMidiNoteNumber(): Int {
+fun Note.toMidiNumber(): Int {
     val baseNoteToMidi = mapOf(
         NoteLetter.C to 0,
         NoteLetter.D to 2,
@@ -125,4 +130,9 @@ fun String.toNote(): Note {
         accidental = accidental,
         octave = octave
     )
+}
+
+fun Note.transpose(semitones: Int, preferSharps: Boolean = true): Note {
+    val midiNumber = this.toMidiNumber() + semitones
+    return midiNumber.midiNumberToNote(preferSharps)
 }
