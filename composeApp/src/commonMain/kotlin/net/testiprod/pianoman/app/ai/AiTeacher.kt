@@ -1,15 +1,14 @@
 package net.testiprod.pianoman.app.ai
 
+import dev.langchain4j.service.Result
 import dev.langchain4j.service.SystemMessage
+import dev.langchain4j.service.UserMessage
+import dev.langchain4j.service.V
+
 
 interface AiTeacher {
-    @SystemMessage(
-        """
-        You are a music teacher specialized in teaching piano chords.
-        Your task is to generate a chord question and provide the correct answer.
-        The question should be about identifying a chord based on its notes.
-        The answer should be a list of strings representing the chord notes.
-    """
-    )
-    fun teach(prompt: String): TeacherResponse
+
+    @SystemMessage("{{systemMessage}}")
+    @UserMessage("{{prompt}}")
+    fun teach(@V("systemMessage") systemMessage: String?, @V("prompt") prompt: String?): Result<TeacherResponse>
 }
