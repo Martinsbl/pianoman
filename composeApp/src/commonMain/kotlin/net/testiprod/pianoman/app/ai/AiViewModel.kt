@@ -21,8 +21,8 @@ class AiViewModel(
 
     private val ai = Ai(aiConfig)
 
-    private val _aiResponse = MutableStateFlow<UiState<String>>(UiState.Loading)
-    val aiResponse: StateFlow<UiState<String>> = _aiResponse.asStateFlow()
+    private val _aiResponse = MutableStateFlow<UiState<TeacherResponse>>(UiState.Loading)
+    val aiResponse: StateFlow<UiState<TeacherResponse>> = _aiResponse.asStateFlow()
 
 
     fun chat(prompt: String) {
@@ -30,10 +30,7 @@ class AiViewModel(
         viewModelScope.launch {
             try {
                 val response = ai.chat(prompt)
-                logger.info("AI response {}", response)
-                val chords = response.answerChord.joinToString(", ")
-                val formattedResponse = "Question: ${response.chordQuestion}\nChords: $chords"
-                _aiResponse.value = UiState.Success(formattedResponse)
+                _aiResponse.value = UiState.Success(response)
             } catch (e: Exception) {
                 logger.error("Error during AI chat", e)
                 _aiResponse.value = UiState.Error(e::class.java.simpleName, e.message ?: "Unknown error")

@@ -25,7 +25,7 @@ class Ai(
             .apiKey(config.apiKey)
             .maxTokens(config.maxTokens)
             .temperature(config.temperature)
-            .strictJsonSchema(true)
+            .responseFormat("json_schema")
             .logRequests(true)
             .build()
     }
@@ -45,7 +45,12 @@ class Ai(
 
     suspend fun chat(prompt: String): TeacherResponse = withContext(Dispatchers.IO) {
         val systemPrompt = getBaseSystemPrompt()
-        val aiResult = aiTeacher.teach(systemPrompt, prompt)
+        val validatedPrompt = prompt.ifBlank {
+            val defaultPrompt = "Teach me about piano chords or the circle of fifths."
+            logger.warn("Received empty prompt, returning default response: '$defaultPrompt'")
+            defaultPrompt
+        }
+        val aiResult = aiTeacher.teach(systemPrompt, validatedPrompt)
         logger.info(aiResult.tokenUsage().toString())
         return@withContext aiResult.content()
     }

@@ -21,6 +21,12 @@ data class Note(
     override fun toString(): String {
         return "${letter.name}${accidental.symbol}$octave"
     }
+
+    companion object {
+        fun fromMidi(midiNumber: Int, preferSharps: Boolean = true): Note {
+            return midiNumber.midiNumberToNote(preferSharps)
+        }
+    }
 }
 
 fun Note.toMidiNoteNumber(): Int {

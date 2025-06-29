@@ -10,5 +10,5 @@ interface AiTeacher {
 
     @SystemMessage("{{systemMessage}}")
     @UserMessage("{{prompt}}")
-    fun teach(@V("systemMessage") systemMessage: String?, @V("prompt") prompt: String?): Result<TeacherResponse>
+    fun teach(@V("systemMessage") systemMessage: String?, @V("prompt") prompt: String): Result<TeacherResponse>
 }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import net.testiprod.pianoman.app.ai.AiViewModel
+import net.testiprod.pianoman.app.ai.TeacherResponse
 import net.testiprod.pianoman.app.midi.MidiViewModel
 import net.testiprod.pianoman.app.music.moonlightSonataNotes
 import net.testiprod.pianoman.app.ui.AiView
@@ -22,6 +23,7 @@ import net.testiprod.pianoman.app.ui.MidiDeviceListView
 import net.testiprod.pianoman.app.ui.PianoView
 import net.testiprod.pianoman.app.ui.UiState
 import net.testiprod.pianoman.app.ui.mock.mockMidiDeviceInfo
+import net.testiprod.pianoman.app.ui.mock.teacherResponse
 import net.testiprod.pianoman.transport.TMidiDeviceInfo
 
 @Composable
@@ -50,7 +52,7 @@ fun MainScreen(
 
 @Composable
 private fun MainScreenContent(
-    aiResponse: UiState<String>,
+    aiResponse: UiState<TeacherResponse>,
     midiDevices: UiState<List<TMidiDeviceInfo>>,
     onFetchDevicesClick: () -> Unit,
     onDeviceClick: (deviceId: Int) -> Unit,
@@ -100,7 +102,7 @@ private fun MainScreenContent(
 private fun Preview() {
     MainScreenContent(
         midiDevices = UiState.Success(mockMidiDeviceInfo),
-        aiResponse = UiState.Success("AI Response Preview"),
+        aiResponse = UiState.Success(teacherResponse),
         onFetchDevicesClick = {},
         onDeviceClick = {},
         onKeyPress = { _ -> },
