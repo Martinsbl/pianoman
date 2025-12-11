@@ -5,18 +5,19 @@ import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.routing
-import io.ktor.server.sse.SSE
 import io.ktor.server.websocket.WebSockets
 import io.ktor.server.websocket.pingPeriod
 import io.ktor.server.websocket.timeout
+import io.modelcontextprotocol.kotlin.sdk.server.mcp
 import javax.sound.midi.MidiSystem
 import kotlin.time.Duration.Companion.seconds
-import net.testiprod.midi.server.midi.configureMidiRouting
-import net.testiprod.midi.server.midi.getMidiDeviceInfo
 import net.testiprod.midi.server.ktor.RequestLoggerPlugin
 import net.testiprod.midi.server.ktor.configureExceptionHandling
 import net.testiprod.midi.server.ktor.configureSerialization
 import net.testiprod.midi.server.ktor.configureSwagger
+import net.testiprod.midi.server.mcp.configureMcpServer
+import net.testiprod.midi.server.midi.configureMidiRouting
+import net.testiprod.midi.server.midi.getMidiDeviceInfo
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("ApplicationKt")
@@ -42,7 +43,7 @@ fun Application.module() {
     configureExceptionHandling()
 
     install(RequestLoggerPlugin)
-    install(SSE)
+//    install(SSE) // Crashes with MCP SDK's mcp{} block
 
     install(WebSockets) {
         pingPeriod = 15.seconds
@@ -51,7 +52,13 @@ fun Application.module() {
         masking = false
     }
 
+    mcp {
+        logger.info("Starting mcp server")
+        return@mcp call.configureMcpServer()
+    }
+
     routing {
+        logger.info("Configuring routing")
         configureMidiRouting()
     }
 }

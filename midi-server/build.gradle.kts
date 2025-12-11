@@ -35,6 +35,8 @@ dependencies {
     implementation("io.ktor:ktor-server-swagger")
     implementation("io.ktor:ktor-server-websockets")
 
+    implementation("io.modelcontextprotocol:kotlin-sdk:0.8.1")
+
     implementation(project(":common"))
 
     testImplementation("io.ktor:ktor-server-test-host")
